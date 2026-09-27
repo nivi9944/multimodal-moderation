@@ -1,0 +1,203 @@
+{
+  "dataset": "Hateful Memes",
+  "eval_split_note": "test = labelled split named in data_summary.json (hateful_memes.test_file)",
+  "protocol": "branches trained on branch_train; fusion LR trained on fusion_train (held out); thresholds from 5-fold OOF on fusion_train; metrics on test",
+  "variants": {
+    "text_only": {
+      "features": [
+        "p_text"
+      ],
+      "oof": {
+        "n": 1700,
+        "positive_rate": 0.3553,
+        "threshold": 0.3668,
+        "accuracy": 0.7535,
+        "f1_harmful": 0.6779,
+        "macro_f1": 0.7392,
+        "auroc": 0.818,
+        "average_precision": 0.7451
+      },
+      "test": {
+        "n": 1000,
+        "positive_rate": 0.49,
+        "threshold": 0.3668,
+        "accuracy": 0.614,
+        "f1_harmful": 0.5448,
+        "macro_f1": 0.6049,
+        "auroc": 0.6858,
+        "average_precision": 0.6615
+      }
+    },
+    "image_only": {
+      "features": [
+        "p_image"
+      ],
+      "oof": {
+        "n": 1700,
+        "positive_rate": 0.3553,
+        "threshold": 0.359,
+        "accuracy": 0.5576,
+        "f1_harmful": 0.325,
+        "macro_f1": 0.498,
+        "auroc": 0.4988,
+        "average_precision": 0.3471
+      },
+      "test": {
+        "n": 1000,
+        "positive_rate": 0.49,
+        "threshold": 0.359,
+        "accuracy": 0.519,
+        "f1_harmful": 0.3904,
+        "macro_f1": 0.4966,
+        "auroc": 0.5154,
+        "average_precision": 0.5173
+      }
+    },
+    "image_plus_weapon": {
+      "features": [
+        "p_image",
+        "weapon_max_conf",
+        "weapon_present"
+      ],
+      "oof": {
+        "n": 1700,
+        "positive_rate": 0.3553,
+        "threshold": 0.362,
+        "accuracy": 0.5282,
+        "f1_harmful": 0.4484,
+        "macro_f1": 0.5181,
+        "auroc": 0.5275,
+        "average_precision": 0.3702
+      },
+      "test": {
+        "n": 1000,
+        "positive_rate": 0.49,
+        "threshold": 0.362,
+        "accuracy": 0.487,
+        "f1_harmful": 0.4571,
+        "macro_f1": 0.4854,
+        "auroc": 0.5062,
+        "average_precision": 0.5082
+      }
+    },
+    "late_fusion": {
+      "features": [
+        "p_text",
+        "p_image",
+        "weapon_max_conf",
+        "weapon_present",
+        "p_text_jigsaw",
+        "text_x_image"
+      ],
+      "oof": {
+        "n": 1700,
+        "positive_rate": 0.3553,
+        "threshold": 0.3796,
+        "accuracy": 0.7535,
+        "f1_harmful": 0.6693,
+        "macro_f1": 0.7364,
+        "auroc": 0.8173,
+        "average_precision": 0.7418
+      },
+      "test": {
+        "n": 1000,
+        "positive_rate": 0.49,
+        "threshold": 0.3796,
+        "accuracy": 0.618,
+        "f1_harmful": 0.5474,
+        "macro_f1": 0.6085,
+        "auroc": 0.683,
+        "average_precision": 0.6605
+      }
+    },
+    "clip_linear_probe": {
+      "features": [
+        "p_clip"
+      ],
+      "oof": {
+        "n": 1700,
+        "positive_rate": 0.3553,
+        "threshold": 0.3919,
+        "accuracy": 0.79,
+        "f1_harmful": 0.7182,
+        "macro_f1": 0.7754,
+        "auroc": 0.8588,
+        "average_precision": 0.7714
+      },
+      "test": {
+        "n": 1000,
+        "positive_rate": 0.49,
+        "threshold": 0.3919,
+        "accuracy": 0.69,
+        "f1_harmful": 0.6548,
+        "macro_f1": 0.6867,
+        "auroc": 0.7636,
+        "average_precision": 0.7269
+      }
+    },
+    "text_plus_clip": {
+      "features": [
+        "p_text",
+        "p_text_jigsaw",
+        "p_clip"
+      ],
+      "oof": {
+        "n": 1700,
+        "positive_rate": 0.3553,
+        "threshold": 0.3449,
+        "accuracy": 0.7953,
+        "f1_harmful": 0.736,
+        "macro_f1": 0.7844,
+        "auroc": 0.8695,
+        "average_precision": 0.7971
+      },
+      "test": {
+        "n": 1000,
+        "positive_rate": 0.49,
+        "threshold": 0.3449,
+        "accuracy": 0.687,
+        "f1_harmful": 0.6624,
+        "macro_f1": 0.6853,
+        "auroc": 0.7633,
+        "average_precision": 0.7322
+      }
+    },
+    "late_fusion_plus_clip": {
+      "features": [
+        "p_text",
+        "p_image",
+        "weapon_max_conf",
+        "weapon_present",
+        "p_text_jigsaw",
+        "text_x_image",
+        "p_clip"
+      ],
+      "oof": {
+        "n": 1700,
+        "positive_rate": 0.3553,
+        "threshold": 0.3534,
+        "accuracy": 0.7988,
+        "f1_harmful": 0.7405,
+        "macro_f1": 0.7881,
+        "auroc": 0.8692,
+        "average_precision": 0.7977
+      },
+      "test": {
+        "n": 1000,
+        "positive_rate": 0.49,
+        "threshold": 0.3534,
+        "accuracy": 0.688,
+        "f1_harmful": 0.6601,
+        "macro_f1": 0.6859,
+        "auroc": 0.7617,
+        "average_precision": 0.7313
+      }
+    }
+  },
+  "headline": "text_plus_clip",
+  "headline_rule": "highest out-of-fold AUROC on fusion_train",
+  "deployed_api": "late_fusion",
+  "best_single_branch": "text_only",
+  "fusion_minus_best_single_auroc": -0.0028,
+  "headline_minus_text_only_auroc": 0.0775
+}

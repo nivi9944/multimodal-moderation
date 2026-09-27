@@ -1,0 +1,25 @@
+{
+  "n_items": 1000,
+  "t_clear": 0.207134,
+  "auto_cleared_pct": 40.6,
+  "sent_to_review_or_flagged_pct": 59.4,
+  "harmful_recall": 0.7898,
+  "harmful_missed": 103,
+  "harmful_rate_in_cleared_pct": 25.37,
+  "base_harmful_rate_pct": 49.0,
+  "variant": "text_plus_clip",
+  "reference_test_oracle_at_target_recall": {
+    "auto_cleared_pct": 27.6,
+    "note": "threshold picked on test labels; for context only, not a result of the method"
+  },
+  "deployed_api": {
+    "late_fusion": {
+      "t_clear": 0.164945,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.8061,
+      "test_harmful_precision": 0.594,
+      "test_auto_cleared_pct": 33.5
+    }
+  },
+  "definition": "auto_cleared_pct = share of test items with p_harmful < t_clear, where t_clear keeps Harmful recall >= 90% on validation (out-of-fold). These items skip manual review."
+}

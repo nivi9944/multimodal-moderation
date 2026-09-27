@@ -1,0 +1,89 @@
+{
+  "thresholds": {
+    "t_clear": 0.207134,
+    "t_flag": 0.631468,
+    "target_recall": 0.9,
+    "target_precision": 0.8
+  },
+  "at_t_clear": {
+    "harmful_recall": 0.7898,
+    "harmful_precision": 0.6515,
+    "flagged_share": 0.594
+  },
+  "at_t_flag": {
+    "harmful_recall": 0.3082,
+    "harmful_precision": 0.7588,
+    "flagged_share": 0.199
+  },
+  "variant": "text_plus_clip",
+  "val_oof": {
+    "thresholds": {
+      "t_clear": 0.207134,
+      "t_flag": 0.631468,
+      "target_recall": 0.9,
+      "target_precision": 0.8
+    },
+    "at_t_clear": {
+      "harmful_recall": 0.9007,
+      "harmful_precision": 0.5926,
+      "flagged_share": 0.54
+    },
+    "at_t_flag": {
+      "harmful_recall": 0.5281,
+      "harmful_precision": 0.8015,
+      "flagged_share": 0.2341
+    }
+  },
+  "per_variant": {
+    "text_only": {
+      "t_clear": 0.169898,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.7898,
+      "test_harmful_precision": 0.5954,
+      "test_auto_cleared_pct": 35.0
+    },
+    "image_only": {
+      "t_clear": 0.342208,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.9061,
+      "test_harmful_precision": 0.4901,
+      "test_auto_cleared_pct": 9.4
+    },
+    "image_plus_weapon": {
+      "t_clear": 0.306655,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.9102,
+      "test_harmful_precision": 0.4934,
+      "test_auto_cleared_pct": 9.6
+    },
+    "late_fusion": {
+      "t_clear": 0.164945,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.8061,
+      "test_harmful_precision": 0.594,
+      "test_auto_cleared_pct": 33.5
+    },
+    "clip_linear_probe": {
+      "t_clear": 0.213026,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.7837,
+      "test_harmful_precision": 0.6553,
+      "test_auto_cleared_pct": 41.4
+    },
+    "text_plus_clip": {
+      "t_clear": 0.207134,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.7898,
+      "test_harmful_precision": 0.6515,
+      "test_auto_cleared_pct": 40.6
+    },
+    "late_fusion_plus_clip": {
+      "t_clear": 0.197635,
+      "oof_harmful_recall": 0.9007,
+      "test_harmful_recall": 0.7878,
+      "test_harmful_precision": 0.6433,
+      "test_auto_cleared_pct": 40.0
+    }
+  },
+  "note": "Thresholds chosen on fusion_train out-of-fold scores (target Harmful recall 0.9); applied unchanged to test."
+}

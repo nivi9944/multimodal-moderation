@@ -1,0 +1,521 @@
+{
+  "dataset": "Jigsaw Toxic Comment Classification (Kaggle train.csv; official test.csv + test_labels.csv, rows with -1 dropped)",
+  "label_scheme": "mild",
+  "splits": {
+    "train": {
+      "n": 143613,
+      "label_counts": {
+        "Safe": 129010,
+        "Neutral": 5385,
+        "Harmful": 9218
+      }
+    },
+    "val": {
+      "n": 15958,
+      "label_counts": {
+        "Safe": 14336,
+        "Neutral": 598,
+        "Harmful": 1024
+      }
+    },
+    "test": {
+      "n": 63978,
+      "label_counts": {
+        "Safe": 57735,
+        "Neutral": 1759,
+        "Harmful": 4484
+      }
+    }
+  },
+  "vader": {
+    "thresholds": {
+      "harmful_below": -0.8,
+      "neutral_below": -0.6
+    },
+    "val_macro_f1": 0.4395,
+    "test": {
+      "n": 63978,
+      "accuracy": 0.8078,
+      "macro_f1": 0.4162,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9351,
+          "recall": 0.8676,
+          "f1": 0.9001,
+          "support": 57735
+        },
+        "Neutral": {
+          "precision": 0.0573,
+          "recall": 0.162,
+          "f1": 0.0846,
+          "support": 1759
+        },
+        "Harmful": {
+          "precision": 0.2407,
+          "recall": 0.2919,
+          "f1": 0.2638,
+          "support": 4484
+        }
+      },
+      "confusion_matrix": [
+        [
+          50088,
+          3777,
+          3870
+        ],
+        [
+          1214,
+          285,
+          260
+        ],
+        [
+          2260,
+          915,
+          1309
+        ]
+      ],
+      "harmful_vs_rest": {
+        "n": 63978,
+        "positive_rate": 0.0701,
+        "threshold": 0.8,
+        "accuracy": 0.8858,
+        "f1_harmful": 0.2638,
+        "macro_f1": 0.601,
+        "auroc": 0.7827,
+        "average_precision": 0.2128
+      }
+    },
+    "seconds": 36.5
+  },
+  "tfidf_logreg": {
+    "val": {
+      "n": 15958,
+      "accuracy": 0.938,
+      "macro_f1": 0.7071,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9799,
+          "recall": 0.9719,
+          "f1": 0.9759,
+          "support": 14336
+        },
+        "Neutral": {
+          "precision": 0.3361,
+          "recall": 0.4064,
+          "f1": 0.3679,
+          "support": 598
+        },
+        "Harmful": {
+          "precision": 0.7805,
+          "recall": 0.7744,
+          "f1": 0.7775,
+          "support": 1024
+        }
+      },
+      "confusion_matrix": [
+        [
+          13933,
+          321,
+          82
+        ],
+        [
+          214,
+          243,
+          141
+        ],
+        [
+          72,
+          159,
+          793
+        ]
+      ]
+    },
+    "test": {
+      "n": 63978,
+      "accuracy": 0.8761,
+      "macro_f1": 0.5903,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9873,
+          "recall": 0.8998,
+          "f1": 0.9416,
+          "support": 57735
+        },
+        "Neutral": {
+          "precision": 0.1311,
+          "recall": 0.3735,
+          "f1": 0.1941,
+          "support": 1759
+        },
+        "Harmful": {
+          "precision": 0.542,
+          "recall": 0.7674,
+          "f1": 0.6353,
+          "support": 4484
+        }
+      },
+      "confusion_matrix": [
+        [
+          51952,
+          3584,
+          2199
+        ],
+        [
+          393,
+          657,
+          709
+        ],
+        [
+          273,
+          770,
+          3441
+        ]
+      ],
+      "harmful_vs_rest": {
+        "n": 63978,
+        "positive_rate": 0.0701,
+        "threshold": 0.5,
+        "accuracy": 0.9431,
+        "f1_harmful": 0.6502,
+        "macro_f1": 0.8096,
+        "auroc": 0.9669,
+        "average_precision": 0.7448
+      }
+    },
+    "train_seconds": 368.0
+  },
+  "ablation_spec_mapping": {
+    "splits": {
+      "train": {
+        "Safe": 129011,
+        "Neutral": 285,
+        "Harmful": 14317
+      },
+      "val": {
+        "Safe": 14335,
+        "Neutral": 32,
+        "Harmful": 1591
+      },
+      "test": {
+        "Safe": 57735,
+        "Neutral": 49,
+        "Harmful": 6194
+      }
+    },
+    "tfidf_logreg_test": {
+      "n": 63978,
+      "accuracy": 0.8973,
+      "macro_f1": 0.5299,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9892,
+          "recall": 0.897,
+          "f1": 0.9408,
+          "support": 57735
+        },
+        "Neutral": {
+          "precision": 0.0115,
+          "recall": 0.0204,
+          "f1": 0.0147,
+          "support": 49
+        },
+        "Harmful": {
+          "precision": 0.4872,
+          "recall": 0.9077,
+          "f1": 0.634,
+          "support": 6194
+        }
+      },
+      "confusion_matrix": [
+        [
+          51787,
+          68,
+          5880
+        ],
+        [
+          10,
+          1,
+          38
+        ],
+        [
+          554,
+          18,
+          5622
+        ]
+      ],
+      "harmful_vs_rest": {
+        "n": 63978,
+        "positive_rate": 0.0968,
+        "threshold": 0.5,
+        "accuracy": 0.8995,
+        "f1_harmful": 0.6355,
+        "macro_f1": 0.7886,
+        "auroc": 0.9658,
+        "average_precision": 0.7782
+      }
+    }
+  },
+  "majority_class": {
+    "predicts": "Safe",
+    "test": {
+      "n": 63978,
+      "accuracy": 0.9024,
+      "macro_f1": 0.3162,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9024,
+          "recall": 1.0,
+          "f1": 0.9487,
+          "support": 57735
+        },
+        "Neutral": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 1759
+        },
+        "Harmful": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4484
+        }
+      },
+      "confusion_matrix": [
+        [
+          57735,
+          0,
+          0
+        ],
+        [
+          1759,
+          0,
+          0
+        ],
+        [
+          4484,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  "distilroberta": {
+    "base_model": "distilroberta-base",
+    "epochs": 2.0,
+    "max_len": 128,
+    "lr": 3e-05,
+    "batch": 64,
+    "class_weights": [
+      0.3113432824611664,
+      1.5239064693450928,
+      1.1647502183914185
+    ],
+    "train_rows": 143613,
+    "val": {
+      "n": 15958,
+      "accuracy": 0.9363,
+      "macro_f1": 0.7449,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9896,
+          "recall": 0.9575,
+          "f1": 0.9733,
+          "support": 14336
+        },
+        "Neutral": {
+          "precision": 0.333,
+          "recall": 0.5786,
+          "f1": 0.4227,
+          "support": 598
+        },
+        "Harmful": {
+          "precision": 0.8292,
+          "recall": 0.8486,
+          "f1": 0.8388,
+          "support": 1024
+        }
+      },
+      "confusion_matrix": [
+        [
+          13727,
+          559,
+          50
+        ],
+        [
+          123,
+          346,
+          129
+        ],
+        [
+          21,
+          134,
+          869
+        ]
+      ]
+    },
+    "test": {
+      "n": 63978,
+      "accuracy": 0.8553,
+      "macro_f1": 0.6055,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9951,
+          "recall": 0.869,
+          "f1": 0.9278,
+          "support": 57735
+        },
+        "Neutral": {
+          "precision": 0.1211,
+          "recall": 0.5196,
+          "f1": 0.1965,
+          "support": 1759
+        },
+        "Harmful": {
+          "precision": 0.604,
+          "recall": 0.8102,
+          "f1": 0.6921,
+          "support": 4484
+        }
+      },
+      "confusion_matrix": [
+        [
+          50173,
+          5879,
+          1683
+        ],
+        [
+          146,
+          914,
+          699
+        ],
+        [
+          99,
+          752,
+          3633
+        ]
+      ],
+      "harmful_vs_rest": {
+        "n": 63978,
+        "positive_rate": 0.0701,
+        "threshold": 0.5,
+        "accuracy": 0.9512,
+        "f1_harmful": 0.698,
+        "macro_f1": 0.8357,
+        "auroc": 0.9763,
+        "average_precision": 0.7928
+      }
+    },
+    "train_seconds": 1865.8,
+    "gpu": "Tesla T4"
+  },
+  "roberta": {
+    "base_model": "roberta-base",
+    "epochs": 2.0,
+    "max_len": 128,
+    "lr": 3e-05,
+    "batch": 32,
+    "class_weights": [
+      0.3113432824611664,
+      1.5239064693450928,
+      1.1647502183914185
+    ],
+    "train_rows": 143613,
+    "val": {
+      "n": 15958,
+      "accuracy": 0.9438,
+      "macro_f1": 0.7614,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9905,
+          "recall": 0.9644,
+          "f1": 0.9773,
+          "support": 14336
+        },
+        "Neutral": {
+          "precision": 0.3761,
+          "recall": 0.5936,
+          "f1": 0.4604,
+          "support": 598
+        },
+        "Harmful": {
+          "precision": 0.8341,
+          "recall": 0.8594,
+          "f1": 0.8466,
+          "support": 1024
+        }
+      },
+      "confusion_matrix": [
+        [
+          13826,
+          464,
+          46
+        ],
+        [
+          114,
+          355,
+          129
+        ],
+        [
+          19,
+          125,
+          880
+        ]
+      ]
+    },
+    "test": {
+      "n": 63978,
+      "accuracy": 0.8632,
+      "macro_f1": 0.6119,
+      "per_class": {
+        "Safe": {
+          "precision": 0.9947,
+          "recall": 0.8769,
+          "f1": 0.9321,
+          "support": 57735
+        },
+        "Neutral": {
+          "precision": 0.1266,
+          "recall": 0.502,
+          "f1": 0.2023,
+          "support": 1759
+        },
+        "Harmful": {
+          "precision": 0.6081,
+          "recall": 0.8287,
+          "f1": 0.7015,
+          "support": 4484
+        }
+      },
+      "confusion_matrix": [
+        [
+          50625,
+          5426,
+          1684
+        ],
+        [
+          165,
+          883,
+          711
+        ],
+        [
+          105,
+          663,
+          3716
+        ]
+      ],
+      "harmful_vs_rest": {
+        "n": 63978,
+        "positive_rate": 0.0701,
+        "threshold": 0.5,
+        "accuracy": 0.9512,
+        "f1_harmful": 0.7028,
+        "macro_f1": 0.8381,
+        "auroc": 0.977,
+        "average_precision": 0.7967
+      }
+    },
+    "train_seconds": 3916.9,
+    "gpu": "Tesla T4"
+  }
+}

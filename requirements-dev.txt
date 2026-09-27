@@ -1,0 +1,14 @@
+# Light set used by CI and unit tests (no deep-learning wheels needed).
+numpy>=1.26
+pandas>=2.1
+scikit-learn>=1.4
+scipy>=1.11
+joblib>=1.3
+vaderSentiment==3.3.2
+matplotlib>=3.8
+pillow>=10.0
+fastapi>=0.110
+python-multipart>=0.0.9
+httpx>=0.27
+pytest>=8.0
+ruff>=0.5

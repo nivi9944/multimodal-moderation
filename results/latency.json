@@ -1,0 +1,68 @@
+{
+  "text": {
+    "mode": "text",
+    "n_requests": 500,
+    "components": {
+      "text": "text_int8",
+      "meme_text": "meme_text_distilroberta",
+      "image": "efficientnet_b0",
+      "detector": "yolov8s_weapons",
+      "fusion": "p_text,p_image,weapon_max_conf,weapon_present,p_text_jigsaw,text_x_image"
+    },
+    "hardware": {
+      "machine": "x86_64",
+      "system": "Linux",
+      "python": "3.11.15",
+      "logical_cores": 2,
+      "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+      "torch_threads": 2
+    },
+    "client_ms": {
+      "p50": 7.58,
+      "p95": 17.8,
+      "mean": 9.25
+    },
+    "server_model_ms": {
+      "p50": 6.06,
+      "p95": 16.12
+    },
+    "throughput_rps": {
+      "concurrency": 8,
+      "value": 112.43
+    },
+    "note": "One item per request, sequential after warm-up; client_ms includes HTTP overhead on localhost."
+  },
+  "fusion": {
+    "mode": "fusion",
+    "n_requests": 300,
+    "components": {
+      "text": "text_int8",
+      "meme_text": "meme_text_distilroberta",
+      "image": "efficientnet_b0",
+      "detector": "yolov8s_weapons",
+      "fusion": "p_text,p_image,weapon_max_conf,weapon_present,p_text_jigsaw,text_x_image"
+    },
+    "hardware": {
+      "machine": "x86_64",
+      "system": "Linux",
+      "python": "3.11.15",
+      "logical_cores": 2,
+      "cpu": "Intel(R) Xeon(R) Processor @ 2.10GHz",
+      "torch_threads": 2
+    },
+    "client_ms": {
+      "p50": 262.83,
+      "p95": 324.73,
+      "mean": 266.23
+    },
+    "server_model_ms": {
+      "p50": 250.45,
+      "p95": 310.3
+    },
+    "throughput_rps": {
+      "concurrency": 8,
+      "value": 3.81
+    },
+    "note": "One item per request, sequential after warm-up; client_ms includes HTTP overhead on localhost."
+  }
+}

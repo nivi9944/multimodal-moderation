@@ -1,0 +1,39 @@
+{
+  "model": "yolov8s.pt fine-tuned",
+  "dataset": "Open Images V7 weapon subset via FiftyOne",
+  "classes": [
+    "Handgun",
+    "Rifle",
+    "Shotgun",
+    "Knife"
+  ],
+  "split_counts": {
+    "train": {
+      "images": 2600,
+      "boxes": 4299
+    },
+    "val": {
+      "images": 217,
+      "boxes": 425
+    },
+    "test": {
+      "images": 571,
+      "boxes": 1126
+    }
+  },
+  "epochs": 40,
+  "imgsz": 640,
+  "test": {
+    "mAP50": 0.7139,
+    "mAP50_95": 0.5374,
+    "precision": 0.6792,
+    "recall": 0.6598,
+    "per_class_mAP50_95": {
+      "Handgun": 0.6534,
+      "Rifle": 0.4687,
+      "Shotgun": 0.3506,
+      "Knife": 0.677
+    }
+  },
+  "train_seconds": 1322.8
+}

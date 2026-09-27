@@ -1,0 +1,388 @@
+{
+  "civil_comments": {
+    "dataset": "Civil Comments test slice (n=5000, seed 42)",
+    "label_counts": {
+      "Safe": 4604,
+      "Neutral": 86,
+      "Harmful": 310
+    },
+    "models": {
+      "tfidf_logreg": {
+        "n": 5000,
+        "accuracy": 0.8988,
+        "macro_f1": 0.4606,
+        "per_class": {
+          "Safe": {
+            "precision": 0.9519,
+            "recall": 0.9581,
+            "f1": 0.955,
+            "support": 4604
+          },
+          "Neutral": {
+            "precision": 0.0919,
+            "recall": 0.2907,
+            "f1": 0.1397,
+            "support": 86
+          },
+          "Harmful": {
+            "precision": 0.617,
+            "recall": 0.1871,
+            "f1": 0.2871,
+            "support": 310
+          }
+        },
+        "confusion_matrix": [
+          [
+            4411,
+            167,
+            26
+          ],
+          [
+            51,
+            25,
+            10
+          ],
+          [
+            172,
+            80,
+            58
+          ]
+        ],
+        "toxic_vs_safe": {
+          "n": 5000,
+          "positive_rate": 0.0792,
+          "threshold": 0.5,
+          "accuracy": 0.9148,
+          "f1_harmful": 0.4662,
+          "macro_f1": 0.7099,
+          "auroc": 0.8485,
+          "average_precision": 0.4643
+        }
+      },
+      "text_distilroberta": {
+        "n": 5000,
+        "accuracy": 0.868,
+        "macro_f1": 0.46,
+        "per_class": {
+          "Safe": {
+            "precision": 0.9711,
+            "recall": 0.9203,
+            "f1": 0.945,
+            "support": 4604
+          },
+          "Neutral": {
+            "precision": 0.0851,
+            "recall": 0.5581,
+            "f1": 0.1477,
+            "support": 86
+          },
+          "Harmful": {
+            "precision": 0.7534,
+            "recall": 0.1774,
+            "f1": 0.2872,
+            "support": 310
+          }
+        },
+        "confusion_matrix": [
+          [
+            4237,
+            357,
+            10
+          ],
+          [
+            30,
+            48,
+            8
+          ],
+          [
+            96,
+            159,
+            55
+          ]
+        ],
+        "toxic_vs_safe": {
+          "n": 5000,
+          "positive_rate": 0.0792,
+          "threshold": 0.5,
+          "accuracy": 0.8948,
+          "f1_harmful": 0.5112,
+          "macro_f1": 0.7261,
+          "auroc": 0.9164,
+          "average_precision": 0.5675
+        }
+      },
+      "text_roberta": {
+        "n": 5000,
+        "accuracy": 0.883,
+        "macro_f1": 0.4567,
+        "per_class": {
+          "Safe": {
+            "precision": 0.9699,
+            "recall": 0.9387,
+            "f1": 0.9541,
+            "support": 4604
+          },
+          "Neutral": {
+            "precision": 0.0936,
+            "recall": 0.5233,
+            "f1": 0.1587,
+            "support": 86
+          },
+          "Harmful": {
+            "precision": 0.7619,
+            "recall": 0.1548,
+            "f1": 0.2574,
+            "support": 310
+          }
+        },
+        "confusion_matrix": [
+          [
+            4322,
+            275,
+            7
+          ],
+          [
+            33,
+            45,
+            8
+          ],
+          [
+            101,
+            161,
+            48
+          ]
+        ],
+        "toxic_vs_safe": {
+          "n": 5000,
+          "positive_rate": 0.0792,
+          "threshold": 0.5,
+          "accuracy": 0.9148,
+          "f1_harmful": 0.559,
+          "macro_f1": 0.7559,
+          "auroc": 0.9245,
+          "average_precision": 0.5989
+        }
+      },
+      "vader": {
+        "n": 5000,
+        "accuracy": 0.785,
+        "macro_f1": 0.374,
+        "per_class": {
+          "Safe": {
+            "precision": 0.9393,
+            "recall": 0.8341,
+            "f1": 0.8836,
+            "support": 4604
+          },
+          "Neutral": {
+            "precision": 0.0355,
+            "recall": 0.186,
+            "f1": 0.0596,
+            "support": 86
+          },
+          "Harmful": {
+            "precision": 0.1497,
+            "recall": 0.2226,
+            "f1": 0.179,
+            "support": 310
+          }
+        },
+        "confusion_matrix": [
+          [
+            3840,
+            385,
+            379
+          ],
+          [
+            57,
+            16,
+            13
+          ],
+          [
+            191,
+            50,
+            69
+          ]
+        ],
+        "toxic_vs_safe": {
+          "n": 5000,
+          "positive_rate": 0.0792,
+          "threshold": 0.6,
+          "accuracy": 0.7976,
+          "f1_harmful": 0.2263,
+          "macro_f1": 0.5549,
+          "auroc": 0.6737,
+          "average_precision": 0.1496
+        }
+      }
+    },
+    "note": "Models trained on Jigsaw only; no tuning on this set."
+  },
+  "youtoxic": {
+    "dataset": "YouToxic English 1000",
+    "label_counts": {
+      "Safe": 538,
+      "Neutral": 0,
+      "Harmful": 462
+    },
+    "models": {
+      "tfidf_logreg": {
+        "n": 1000,
+        "accuracy": 0.664,
+        "macro_f1": 0.4536,
+        "per_class": {
+          "Safe": {
+            "precision": 0.7225,
+            "recall": 0.8662,
+            "f1": 0.7878,
+            "support": 538
+          },
+          "Neutral": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "Harmful": {
+            "precision": 0.8646,
+            "recall": 0.4286,
+            "f1": 0.5731,
+            "support": 462
+          }
+        },
+        "confusion_matrix": [
+          [
+            466,
+            41,
+            31
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            179,
+            85,
+            198
+          ]
+        ],
+        "toxic_vs_safe": {
+          "n": 1000,
+          "positive_rate": 0.462,
+          "threshold": 0.5,
+          "accuracy": 0.749,
+          "f1_harmful": 0.7001,
+          "macro_f1": 0.7421,
+          "auroc": 0.8044,
+          "average_precision": 0.8085
+        }
+      },
+      "text_distilroberta": {
+        "n": 1000,
+        "accuracy": 0.655,
+        "macro_f1": 0.4716,
+        "per_class": {
+          "Safe": {
+            "precision": 0.7782,
+            "recall": 0.8216,
+            "f1": 0.7993,
+            "support": 538
+          },
+          "Neutral": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "Harmful": {
+            "precision": 0.9261,
+            "recall": 0.461,
+            "f1": 0.6156,
+            "support": 462
+          }
+        },
+        "confusion_matrix": [
+          [
+            442,
+            79,
+            17
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            126,
+            123,
+            213
+          ]
+        ],
+        "toxic_vs_safe": {
+          "n": 1000,
+          "positive_rate": 0.462,
+          "threshold": 0.5,
+          "accuracy": 0.773,
+          "f1_harmful": 0.7486,
+          "macro_f1": 0.7708,
+          "auroc": 0.8563,
+          "average_precision": 0.8329
+        }
+      },
+      "vader": {
+        "n": 1000,
+        "accuracy": 0.559,
+        "macro_f1": 0.3608,
+        "per_class": {
+          "Safe": {
+            "precision": 0.6223,
+            "recall": 0.8086,
+            "f1": 0.7033,
+            "support": 538
+          },
+          "Neutral": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 0
+          },
+          "Harmful": {
+            "precision": 0.6458,
+            "recall": 0.2684,
+            "f1": 0.3792,
+            "support": 462
+          }
+        },
+        "confusion_matrix": [
+          [
+            435,
+            35,
+            68
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            264,
+            74,
+            124
+          ]
+        ],
+        "toxic_vs_safe": {
+          "n": 1000,
+          "positive_rate": 0.462,
+          "threshold": 0.6,
+          "accuracy": 0.633,
+          "f1_harmful": 0.519,
+          "macro_f1": 0.6112,
+          "auroc": 0.683,
+          "average_precision": 0.6038
+        }
+      }
+    },
+    "note": "Models trained on Jigsaw only; no tuning on this set."
+  }
+}

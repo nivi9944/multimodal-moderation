@@ -1,0 +1,121 @@
+{
+  "meme_text": {
+    "log": [
+      {
+        "eval_loss": 1.074960470199585,
+        "eval_auroc": 0.7713781652137817,
+        "eval_runtime": 0.5679,
+        "eval_samples_per_second": 1197.327,
+        "eval_steps_per_second": 5.282,
+        "epoch": 1.0,
+        "step": 96
+      },
+      {
+        "eval_loss": 1.010412335395813,
+        "eval_auroc": 0.8031293633722028,
+        "eval_runtime": 0.592,
+        "eval_samples_per_second": 1148.638,
+        "eval_steps_per_second": 5.068,
+        "epoch": 2.0,
+        "step": 192
+      },
+      {
+        "eval_loss": 1.0617974996566772,
+        "eval_auroc": 0.8042992188384469,
+        "eval_runtime": 0.6307,
+        "eval_samples_per_second": 1078.208,
+        "eval_steps_per_second": 4.757,
+        "epoch": 3.0,
+        "step": 288
+      },
+      {
+        "eval_loss": 1.0643373727798462,
+        "eval_auroc": 0.8067427072719726,
+        "eval_runtime": 0.6298,
+        "eval_samples_per_second": 1079.733,
+        "eval_steps_per_second": 4.764,
+        "epoch": 4.0,
+        "step": 384
+      }
+    ],
+    "jigsaw_feature": false,
+    "data": {
+      "root": "/kaggle/input/datasets/williamberrios/hateful-memes/hateful_memes",
+      "test_file": "test_seen.jsonl",
+      "sizes": {
+        "branch_train": {
+          "n": 6800,
+          "hateful": 2415
+        },
+        "fusion_train": {
+          "n": 1700,
+          "hateful": 604
+        },
+        "test": {
+          "n": 1000,
+          "hateful": 490
+        }
+      }
+    }
+  },
+  "effnet_b0": {
+    "epochs": [
+      {
+        "epoch": 1,
+        "early_stop_auroc": 0.5371
+      },
+      {
+        "epoch": 2,
+        "early_stop_auroc": 0.5512
+      },
+      {
+        "epoch": 3,
+        "early_stop_auroc": 0.5616
+      },
+      {
+        "epoch": 4,
+        "early_stop_auroc": 0.5694
+      },
+      {
+        "epoch": 5,
+        "early_stop_auroc": 0.5665
+      },
+      {
+        "epoch": 6,
+        "early_stop_auroc": 0.5583
+      },
+      {
+        "epoch": 7,
+        "early_stop_auroc": 0.5657
+      },
+      {
+        "epoch": 8,
+        "early_stop_auroc": 0.5644
+      }
+    ],
+    "best_early_stop_auroc": 0.5694,
+    "train_seconds": 740.4,
+    "data": {
+      "root": "/kaggle/input/datasets/williamberrios/hateful-memes/hateful_memes",
+      "test_file": "test_seen.jsonl",
+      "sizes": {
+        "branch_train": {
+          "n": 6800,
+          "hateful": 2415
+        },
+        "fusion_train": {
+          "n": 1700,
+          "hateful": 604
+        },
+        "test": {
+          "n": 1000,
+          "hateful": 490
+        }
+      }
+    }
+  },
+  "clip_probe": {
+    "model": "openai/clip-vit-large-patch14",
+    "C": 1.0
+  }
+}

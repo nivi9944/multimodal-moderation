@@ -1,0 +1,25 @@
+{
+  "model_dir": "models/text_distilroberta",
+  "eval_sample": {
+    "n": 5000,
+    "source": "stratified Jigsaw test sample"
+  },
+  "pytorch_fp32": {
+    "macro_f1": 0.6114,
+    "p50_ms": 28.23,
+    "p95_ms": 53.48
+  },
+  "onnx_int8": {
+    "macro_f1": 0.6183,
+    "p50_ms": 5.78,
+    "p95_ms": 14.67
+  },
+  "speedup_p50": 4.88,
+  "macro_f1_change": 0.0069,
+  "size_mb": {
+    "fp32": 328.6,
+    "int8": 82.5
+  },
+  "torch_threads": 2,
+  "batch_size": 1
+}

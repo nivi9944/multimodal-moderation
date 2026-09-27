@@ -1,0 +1,60 @@
+{
+  "tfidf_logreg_text": {
+    "temperature": 1.042,
+    "val": {
+      "ece_before": 0.0085,
+      "ece_after": 0.0079
+    },
+    "test": {
+      "ece_before": 0.0403,
+      "ece_after": 0.0364
+    },
+    "note": "Top-label ECE, 15 bins, temperature fitted on validation."
+  },
+  "distilroberta_text": {
+    "temperature": 1.1533,
+    "val": {
+      "ece_before": 0.0138,
+      "ece_after": 0.015
+    },
+    "test": {
+      "ece_before": 0.0625,
+      "ece_after": 0.0526
+    },
+    "note": "Top-label ECE, 15 bins, temperature fitted on validation logits."
+  },
+  "roberta_text": {
+    "temperature": 1.2415,
+    "val": {
+      "ece_before": 0.0171,
+      "ece_after": 0.0134
+    },
+    "test": {
+      "ece_before": 0.069,
+      "ece_after": 0.0557
+    },
+    "note": "Top-label ECE, 15 bins, temperature fitted on validation logits."
+  },
+  "fusion_text_plus_clip": {
+    "temperature": 1.0072,
+    "val": {
+      "ece_before": 0.0321,
+      "ece_after": 0.0338
+    },
+    "test": {
+      "ece_before": 0.1589,
+      "ece_after": 0.1577
+    }
+  },
+  "fusion_late_fusion": {
+    "temperature": 1.0116,
+    "val": {
+      "ece_before": 0.0376,
+      "ece_after": 0.0388
+    },
+    "test": {
+      "ece_before": 0.1688,
+      "ece_after": 0.1678
+    }
+  }
+}

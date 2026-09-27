@@ -1,0 +1,25 @@
+# data and weights stay local (see data/README.md)
+data/raw/
+data/processed/*
+!data/processed/.gitkeep
+models/
+runs/
+*.pt
+*.onnx
+*.joblib
+results_*.zip
+
+# local working notes, never pushed
+HANDOVER.md
+
+# python / tooling
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.env
+.DS_Store
+results/RESUME_BULLETS.md

@@ -1,0 +1,83 @@
+{
+  "jigsaw": {
+    "name": "Jigsaw Toxic Comment Classification Challenge (Kaggle, 2018)",
+    "licence": "Comment text CC0; underlying Wikipedia talk-page text CC BY-SA 3.0",
+    "download": "https://raw.githubusercontent.com/nicknochnack/CommentToxicity/main/jigsaw-toxic-comment-classification-challenge/<train|test|test_labels>.csv/<train|test|test_labels>.csv (byte-identical mirror of the Kaggle files; see sha256)",
+    "sha256": {
+      "train": "36e730b9b0852edced41616b0fb53962939d678ac54f170f6d5b1a6a35af1bfd",
+      "test": "c31ef2c52864c3305e3dd82b7ac643b90b5d2f4c39a041480c3835379e93101d",
+      "test_labels": "2a56dcbeba5c05f965a636f56cb5ae972bad60c3b952c239b49be18d7ab70f49"
+    },
+    "label_mapping": "mild (see src/text/data.py and DECISIONS.md D1)",
+    "split_protocol": "train.csv -> 90/10 stratified train/val (seed 42); test.csv + test_labels.csv (rows != -1) -> test",
+    "splits": {
+      "train": {
+        "n": 143613,
+        "Safe": 129010,
+        "Neutral": 5385,
+        "Harmful": 9218
+      },
+      "val": {
+        "n": 15958,
+        "Safe": 14336,
+        "Neutral": 598,
+        "Harmful": 1024
+      },
+      "test": {
+        "n": 63978,
+        "Safe": 57735,
+        "Neutral": 1759,
+        "Harmful": 4484
+      }
+    }
+  },
+  "hateful_memes": {
+    "root": "/kaggle/input/datasets/williamberrios/hateful-memes/hateful_memes",
+    "test_file": "test_seen.jsonl",
+    "sizes": {
+      "branch_train": {
+        "n": 6800,
+        "hateful": 2415
+      },
+      "fusion_train": {
+        "n": 1700,
+        "hateful": 604
+      },
+      "test": {
+        "n": 1000,
+        "hateful": 490
+      }
+    }
+  },
+  "open_images_weapons": {
+    "source": "Open Images V7 (images CC BY 2.0 per Flickr owner; annotations CC BY 4.0)",
+    "classes": [
+      "Handgun",
+      "Rifle",
+      "Shotgun",
+      "Knife"
+    ],
+    "counts": {
+      "train": {
+        "images": 2600,
+        "boxes": 4299
+      },
+      "val": {
+        "images": 217,
+        "boxes": 425
+      },
+      "test": {
+        "images": 571,
+        "boxes": 1126
+      }
+    },
+    "seed": 42
+  },
+  "youtoxic": {
+    "name": "YouToxic English 1000",
+    "source": "Kaggle reihanenamdari/youtube-toxicity-data",
+    "licence": "CC BY 4.0",
+    "n": 1000,
+    "use": "out-of-domain test only (no training or tuning)"
+  }
+}
