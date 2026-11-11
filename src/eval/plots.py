@@ -10,6 +10,7 @@ import json
 
 import matplotlib
 
+# headless backend; it has to be selected before pyplot is imported
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
@@ -25,10 +26,12 @@ PALETTE = {
     "clip_linear_probe": "#B279A2",
     "late_fusion_plus_clip": "#9D755D",
 }
-TEXT_MODEL_ORDER = ["vader", "tfidf_logreg", "roberta", "distilroberta"]  # last present = plotted (deployed model)
+# the last model present in text_eval.json is the deployed one, and that is the one plotted
+TEXT_MODEL_ORDER = ["vader", "tfidf_logreg", "roberta", "distilroberta"]
 
 
 def plot_confusion_text() -> str | None:
+    """Row-normalised Jigsaw test confusion matrix. Returns the PNG path, or None if there is nothing to plot."""
     p = RESULTS / "text_eval.json"
     if not p.exists():
         return None
@@ -64,7 +67,7 @@ def plot_confusion_text() -> str | None:
 
 
 def plot_fusion(curves: dict, out_dir=None) -> None:
-    """curves: {variant: (y_true, p)} on the test split."""
+    """AUROC bar chart and Harmful precision-recall curves. curves: {variant: (y_true, p)} on the test split."""
     out_dir = out_dir or RESULTS
     from sklearn.metrics import roc_auc_score
 

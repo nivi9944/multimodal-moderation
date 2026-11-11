@@ -29,6 +29,7 @@ def build_dataset(out_dir: Path, per_class: int) -> tuple[Path, dict]:
     from fiftyone import ViewField as F
 
     counts = {}
+    # validation and test get a fifth of the train budget per class, at least 50
     budget = {"train": per_class, "validation": max(per_class // 5, 50), "test": max(per_class // 5, 50)}
     for split, yolo_split in (("train", "train"), ("validation", "val"), ("test", "test")):
         views = []

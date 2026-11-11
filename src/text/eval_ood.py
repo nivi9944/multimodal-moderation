@@ -23,6 +23,7 @@ from src.text.infer_text import TfidfScorer, TransformerScorer
 
 
 def load_civil(n: int) -> pd.DataFrame:
+    """Seeded random slice of n rows from the Civil Comments test split."""
     from datasets import load_dataset
 
     ds = load_dataset("google/civil_comments", split="test").shuffle(seed=SEED).select(range(n))
@@ -31,6 +32,7 @@ def load_civil(n: int) -> pd.DataFrame:
 
 
 def evaluate(df: pd.DataFrame) -> dict:
+    """3-class report per model, plus toxic-vs-safe AUROC with 1 - P(Safe) as the score."""
     out: dict = {}
     y = df["label"].to_numpy()
     texts = df["text"].tolist()
@@ -52,6 +54,7 @@ def evaluate(df: pd.DataFrame) -> dict:
         th = read_json(te)["vader"]["thresholds"]
         c = vader_scores(texts)
         rep = classification_report(y, vader_predict(c, th["harmful_below"], th["neutral_below"]))
+        # negated compound, cut at the Neutral threshold learned on Jigsaw
         rep["toxic_vs_safe"] = binary_report(toxic_vs_safe(y), -c, threshold=-th["neutral_below"])
         out["vader"] = rep
     return out

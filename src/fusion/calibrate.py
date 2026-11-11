@@ -49,6 +49,7 @@ def fit_temperature_binary(y, p) -> float:
 
 
 def apply_temperature_binary(p, t: float) -> np.ndarray:
+    """Rescale probabilities by temperature t in logit space."""
     z = logit(np.clip(np.asarray(p, float), 1e-6, 1 - 1e-6))
     return expit(z / t)
 

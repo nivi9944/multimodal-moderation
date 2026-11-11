@@ -23,6 +23,10 @@ from src.text.infer_text import OnnxScorer, TransformerScorer
 
 
 def export(model_dir: Path, out: Path) -> tuple[Path, Path]:
+    """Export to ONNX (opset 17, dynamic batch and sequence axes), then quantize weights to INT8.
+
+    Returns (fp32 path, int8 path).
+    """
     import torch
     from onnxruntime.quantization import QuantType, quantize_dynamic
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -34,7 +38,8 @@ def export(model_dir: Path, out: Path) -> tuple[Path, Path]:
     fp32, int8 = out / "text_fp32.onnx", out / "text_int8.onnx"
     kwargs = {}
     if "dynamo" in torch.onnx.export.__code__.co_varnames:
-        kwargs["dynamo"] = False  # classic TorchScript exporter: no onnxscript needed, stable for BERT-style models
+        # classic TorchScript exporter: needs no onnxscript and is stable for BERT-style models
+        kwargs["dynamo"] = False
     torch.onnx.export(
         model,
         (enc["input_ids"], enc["attention_mask"]),
@@ -50,6 +55,7 @@ def export(model_dir: Path, out: Path) -> tuple[Path, Path]:
 
 
 def per_item_ms(scorer, texts) -> list[float]:
+    """Batch-1 latency per text in ms, after 10 warm-up calls."""
     for t in texts[:10]:
         scorer.predict_proba([t])
     out = []

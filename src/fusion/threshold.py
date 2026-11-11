@@ -22,6 +22,8 @@ from src.config import TARGET_RECALL
 
 @dataclass
 class Thresholds:
+    """The two cut-offs on p_harmful and the targets they were fitted for."""
+
     t_clear: float
     t_flag: float
     target_recall: float
@@ -45,8 +47,8 @@ def recall_precision_at(y, p, t: float) -> tuple[float, float, float]:
 def threshold_for_recall(y, p, target: float = TARGET_RECALL) -> float:
     """Largest threshold t such that recall(p >= t) >= target.
 
-    Sorting positives by score: flagging everything >= the k-th highest positive score
-    gives recall k/pos, so we need k = ceil(target * pos).
+    With positive scores sorted in descending order, flagging everything >= the k-th one
+    gives recall k / pos, so k = ceil(target * pos).
     """
     y, p = np.asarray(y).astype(int), np.asarray(p, float)
     pos_scores = np.sort(p[y == 1])[::-1]
@@ -58,7 +60,10 @@ def threshold_for_recall(y, p, target: float = TARGET_RECALL) -> float:
 
 
 def threshold_for_precision(y, p, target: float = 0.8, floor: float = 0.5) -> float:
-    """Smallest threshold with precision >= target (falls back to max(floor, best-F1 threshold))."""
+    """Smallest threshold with precision >= target over at least 5 flagged items.
+
+    Falls back to max(floor, highest score) when no threshold qualifies.
+    """
     y, p = np.asarray(y).astype(int), np.asarray(p, float)
     candidates = np.unique(p)
     for t in candidates:  # ascending
@@ -69,6 +74,7 @@ def threshold_for_precision(y, p, target: float = 0.8, floor: float = 0.5) -> fl
 
 
 def fit_thresholds(y_val, p_val, target_recall: float = TARGET_RECALL, target_precision: float = 0.8) -> Thresholds:
+    """Fit t_clear for the recall target and t_flag for the precision target; t_flag is never below t_clear."""
     t_clear = threshold_for_recall(y_val, p_val, target_recall)
     t_flag = max(threshold_for_precision(y_val, p_val, target_precision), t_clear)
     return Thresholds(t_clear, t_flag, target_recall, target_precision)
@@ -84,6 +90,7 @@ def decide(p, th: Thresholds) -> np.ndarray:
 
 
 def threshold_report(y, p, th: Thresholds) -> dict:
+    """Harmful recall, precision and flagged share at t_clear and at t_flag."""
     r, pr, flagged = recall_precision_at(y, p, th.t_clear)
     rf, prf, flagged_f = recall_precision_at(y, p, th.t_flag)
     return {

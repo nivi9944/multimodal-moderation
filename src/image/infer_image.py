@@ -9,6 +9,7 @@ import numpy as np
 from src.config import MODELS
 
 IMG_SIZE = 256
+# ImageNet normalisation, matching the pretrained timm weights
 MEAN, STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
 
 
@@ -29,6 +30,7 @@ def build_transforms(train: bool):
 
 
 def build_model(pretrained: bool = True):
+    """EfficientNet-B0 with a single logit output (sigmoid gives P(harmful))."""
     import timm
 
     return timm.create_model("efficientnet_b0", pretrained=pretrained, num_classes=1)

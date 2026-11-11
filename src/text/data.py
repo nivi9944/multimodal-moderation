@@ -6,7 +6,7 @@ Label mapping for Jigsaw (see DECISIONS.md, D1):
     Harmful = severe_toxic | threat | insult | identity_hate | (toxic & obscene)
     Neutral = exactly one of {toxic, obscene} and nothing else ("mild" toxicity)
     Safe    = no label set
-* ``spec`` (literal first draft of the plan)
+* ``spec`` (the literal first-draft mapping)
     Harmful = toxic | severe_toxic | threat | insult | identity_hate
     Neutral = obscene only
     Safe    = no label set
@@ -36,7 +36,7 @@ def map_jigsaw(df: pd.DataFrame, scheme: str = "mild") -> np.ndarray:
     t, s, o, th, ins, ih = (df[c].to_numpy() == 1 for c in JIGSAW_COLS)
     if scheme == "mild":
         harmful = s | th | ins | ih | (t & o)
-        neutral = (t ^ o) & ~harmful
+        neutral = (t ^ o) & ~harmful  # exactly one of toxic, obscene
     elif scheme == "spec":
         harmful = t | s | th | ins | ih
         neutral = o & ~harmful
@@ -48,6 +48,7 @@ def map_jigsaw(df: pd.DataFrame, scheme: str = "mild") -> np.ndarray:
 
 
 def _read(name: str, raw_dir: Path) -> pd.DataFrame:
+    """Read a Jigsaw CSV, downloading it from JIGSAW_URL on first use."""
     path = raw_dir / "jigsaw" / f"{name}.csv"
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -97,8 +98,11 @@ YOUTOXIC_HARM = [
 
 
 def map_youtoxic(df: pd.DataFrame) -> np.ndarray:
-    """YouToxic English 1000: toxic + any hate/abuse/threat flag -> Harmful,
-    toxic with only obscene/provocative flags -> Neutral, not toxic -> Safe."""
+    """YouToxic English 1000 labels.
+
+    Toxic with any YOUTOXIC_HARM flag -> Harmful, toxic without one (e.g. only obscene or
+    provocative) -> Neutral, not toxic -> Safe.
+    """
 
     def flag(col: str) -> np.ndarray:
         return df[col].astype(str).str.lower().isin(["true", "1"]).to_numpy() if col in df else np.zeros(len(df), bool)
@@ -121,8 +125,11 @@ def load_youtoxic(path: Path) -> pd.DataFrame:
 
 
 def map_civil(df: pd.DataFrame) -> np.ndarray:
-    """Civil Comments (fractional annotator scores): toxicity >= 0.5 is toxic;
-    toxic and (severe_toxicity | threat | insult | identity_attack) >= 0.5 -> Harmful."""
+    """Civil Comments labels from fractional annotator scores.
+
+    toxicity >= 0.5 is toxic (Neutral); toxic and any of severe_toxicity, threat, insult or
+    identity_attack >= 0.5 -> Harmful.
+    """
     tox = df["toxicity"].to_numpy() >= 0.5
     harm = np.zeros(len(df), bool)
     for c in ("severe_toxicity", "threat", "insult", "identity_attack"):

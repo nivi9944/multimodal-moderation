@@ -1,4 +1,4 @@
-"""Write results/RESULTS_SUMMARY.md: every resume number, its source file, and the filled resume bullets.
+"""Write results/RESULTS_SUMMARY.md (every headline number and its source file) plus a local bullet summary.
 
 Usage:
     python -m scripts.results_summary      # also prints the table
@@ -149,7 +149,7 @@ def main() -> None:
         *[f"| {m} | {v} | `results/{s}` |" for m, v, s in rows],
     ]
     (RESULTS / "RESULTS_SUMMARY.md").write_text("\n".join(md).rstrip() + "\n", encoding="utf-8")
-    # Resume bullets stay local (git-ignored): they are for the author, not for the public repo.
+    # The bullet file is git-ignored and stays out of the public repo.
     bl = ["# Resume bullets (local only, filled from RESULTS_SUMMARY.md)", "", *bullets]
     (RESULTS / "RESUME_BULLETS.md").write_text("\n".join(bl) + "\n", encoding="utf-8")
     print("\n".join(md + ["", *bl]))

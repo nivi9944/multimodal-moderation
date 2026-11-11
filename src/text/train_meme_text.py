@@ -41,6 +41,7 @@ def main() -> None:
     set_seed()
     splits, meta = load_memes(args.memes_root)
     tok = AutoTokenizer.from_pretrained(args.model)
+    # 10% of branch_train is held out to pick the best epoch by AUROC
     tr, es = train_test_split(
         splits["branch_train"], test_size=0.1, random_state=SEED, stratify=splits["branch_train"]["label"]
     )

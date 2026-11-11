@@ -10,6 +10,7 @@ import pandas as pd
 from src.config import DATA_PROCESSED
 
 BRANCH_FILES = ["meme_scores_text.csv", "meme_scores_image.csv", "meme_scores_weapon.csv", "meme_scores_clip.csv"]
+# columns in [0, 1] that are logit-transformed before fitting
 PROB_COLS = {"p_text", "p_image", "p_text_jigsaw", "p_clip", "weapon_max_conf"}
 
 # Feature sets compared in results/fusion_eval.json. Columns missing from the data are skipped.
@@ -34,7 +35,7 @@ DEPLOYED = "late_fusion"
 
 
 def load_branch_scores(processed: Path = DATA_PROCESSED) -> pd.DataFrame:
-    """Outer-join every available branch file on (id, split, label)."""
+    """Inner-join every available branch file on (id, split, label), keeping items scored by all of them."""
     df = None
     for name in BRANCH_FILES:
         p = processed / name
@@ -57,6 +58,7 @@ def make_features(df: pd.DataFrame, cols: list[str]) -> tuple[np.ndarray, list[s
     feats, used = [], []
     for c in cols:
         if c == "text_x_image":
+            # interaction term: product of the text and image logits, scaled down by 10
             if {"p_text", "p_image"} <= set(df.columns):
                 feats.append(_logit(df["p_text"].to_numpy()) * _logit(df["p_image"].to_numpy()) / 10)
                 used.append(c)

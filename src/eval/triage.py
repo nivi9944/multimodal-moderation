@@ -15,6 +15,7 @@ import numpy as np
 
 
 def triage_report(y, p, t_clear: float) -> dict:
+    """Share auto-cleared at p < t_clear and what it costs. y is binary (1 = Harmful)."""
     y, p = np.asarray(y).astype(int), np.asarray(p, float)
     cleared = p < t_clear
     n_pos = int((y == 1).sum())

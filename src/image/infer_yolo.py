@@ -30,6 +30,7 @@ class WeaponDetector:
         """images: PIL images or paths. Returns one feature dict per image."""
         feats = []
         for i in range(0, len(images), batch):
+            # low conf floor so weapon_max_conf still carries signal below CONF_PRESENT
             for r in self.model.predict(images[i : i + batch], conf=0.05, verbose=False, device=self.device):
                 conf = r.boxes.conf.cpu().numpy() if len(r.boxes) else np.zeros(0)
                 cls = r.boxes.cls.cpu().numpy().astype(int) if len(r.boxes) else np.zeros(0, int)

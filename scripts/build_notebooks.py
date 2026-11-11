@@ -80,11 +80,12 @@ def harden(nb: nbf.NotebookNode) -> nbf.NotebookNode:
                 line = f"{indent}sh('{cmd}'{', required=False' if soft else ''})"
             lines.append(line)
         cell.source = "\n".join(lines)
-    nb.cells.insert(2, code(SH_HELPER))
+    nb.cells.insert(2, code(SH_HELPER))  # after the header and the unpack cell
     return nb
 
 
 def collect() -> dict[str, str]:
+    """Map relative path -> source for every file under src/ and scripts/ except this one."""
     files = {}
     for pattern in ("src/**/*.py", "scripts/*.py"):
         for p in sorted(ROOT.glob(pattern)):

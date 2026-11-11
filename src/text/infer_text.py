@@ -16,6 +16,8 @@ from src.text.clean import normalise
 
 
 class TransformerScorer:
+    """Fine-tuned Hugging Face classifier (PyTorch, CPU or GPU)."""
+
     backend = "transformer"
 
     def __init__(self, model_dir: Path, max_len: int = 128, device: str | None = None):
@@ -25,6 +27,7 @@ class TransformerScorer:
         self.torch = torch
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.tok = AutoTokenizer.from_pretrained(model_dir)
+        # .float() upcasts checkpoints saved in fp16 (scripts/save_half.py)
         self.model = AutoModelForSequenceClassification.from_pretrained(model_dir).float().to(self.device).eval()
         self.max_len = max_len
         self.name = Path(model_dir).name
@@ -45,6 +48,8 @@ class TransformerScorer:
 
 
 class OnnxScorer:
+    """ONNX Runtime classifier on CPU; tok_dir holds the matching tokenizer."""
+
     backend = "onnx"
 
     def __init__(self, onnx_path: Path, tok_dir: Path, max_len: int = 128):
@@ -55,6 +60,7 @@ class OnnxScorer:
         self.tok = AutoTokenizer.from_pretrained(tok_dir)
         self.max_len = max_len
         self.name = Path(onnx_path).stem
+        # tokenizer outputs not declared by the exported graph are dropped before each run
         self.inputs = {i.name for i in self.sess.get_inputs()}
 
     def predict_proba(self, texts: list[str], batch: int = 32) -> np.ndarray:
@@ -88,7 +94,11 @@ class TfidfScorer:
 
 
 def load_text_scorer(prefer: str = "auto", models_dir: Path = MODELS):
-    """prefer: auto | onnx | transformer | tfidf."""
+    """Return a text scorer, or None if no model is found.
+
+    prefer: auto | onnx | transformer | tfidf. With auto the order is ONNX INT8, then the
+    transformer (DistilRoBERTa if several exist), then TF-IDF.
+    """
     onnx = models_dir / "onnx" / "text_int8.onnx"
     tdirs = sorted(p for p in models_dir.glob("text_*") if (p / "config.json").exists())
     if prefer in ("auto", "onnx") and onnx.exists() and tdirs:

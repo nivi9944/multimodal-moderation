@@ -18,6 +18,7 @@ from src.image.memes import load_memes
 
 
 def embed(df: pd.DataFrame, model, proc, device, batch: int = 64) -> np.ndarray:
+    """Per row: L2-normalised image and text embeddings and their elementwise product, concatenated."""
     import torch
     from PIL import Image
 
@@ -32,7 +33,7 @@ def embed(df: pd.DataFrame, model, proc, device, batch: int = 64) -> np.ndarray:
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
-                max_length=77,
+                max_length=77,  # CLIP text context length
             ).to(device)
             o = model(**enc)
             im = torch.nn.functional.normalize(o.image_embeds, dim=-1)

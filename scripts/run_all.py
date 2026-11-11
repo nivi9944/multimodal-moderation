@@ -46,7 +46,7 @@ def main() -> None:
     if args.latency:
         srv = subprocess.Popen([sys.executable, "-m", "uvicorn", "src.serve.app:app", "--port", "8000"])
         try:
-            time.sleep(15)
+            time.sleep(15)  # give uvicorn time to load the models
             sh("src.eval.latency", "--mode", "text")
             if (MODELS / "fusion_lr.joblib").exists() and Path(DATA_RAW / "hateful_memes").exists():
                 sh(

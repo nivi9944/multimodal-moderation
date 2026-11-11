@@ -31,6 +31,7 @@ DEFAULT_CANDIDATES = [
 
 
 def find_root(explicit: str | Path | None = None) -> Path:
+    """First directory containing train.jsonl: explicit path, MM_MEMES_ROOT, known locations, then /kaggle/input."""
     cands = [Path(explicit)] if explicit else []
     if os.environ.get("MM_MEMES_ROOT"):
         env_root = Path(os.environ["MM_MEMES_ROOT"])
@@ -49,9 +50,11 @@ def _read_jsonl(path: Path) -> pd.DataFrame:
 
 
 def load_memes(root: str | Path | None = None, fusion_frac: float = 0.2, seed: int = SEED) -> tuple[dict, dict]:
+    """Return (splits, meta): the three split frames and a summary for data_summary.json."""
     root = find_root(root)
     train = _read_jsonl(root / "train.jsonl")
     test, test_name = None, None
+    # first fully labelled file wins; unlabelled test files are skipped
     for name in ("test_seen.jsonl", "dev_seen.jsonl", "dev.jsonl"):
         p = root / name
         if p.exists():

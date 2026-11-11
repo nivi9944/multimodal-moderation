@@ -8,6 +8,7 @@ import random
 from pathlib import Path
 from typing import Any
 
+# MM_ROOT overrides the repo root (the Kaggle notebooks point it at their working copy).
 ROOT = Path(os.environ.get("MM_ROOT", Path(__file__).resolve().parents[1]))
 DATA_RAW = ROOT / "data" / "raw"
 DATA_PROCESSED = ROOT / "data" / "processed"

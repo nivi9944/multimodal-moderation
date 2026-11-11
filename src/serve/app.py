@@ -39,6 +39,7 @@ class Moderator:
 
     @classmethod
     def from_disk(cls, models_dir: Path = MODELS) -> Moderator:
+        """Load whichever components exist under models_dir; the rest stay None."""
         from src.text.infer_text import TransformerScorer, load_text_scorer
 
         text = load_text_scorer("auto", models_dir)
@@ -70,6 +71,7 @@ class Moderator:
 
     # ------------------------------------------------------------------ decision
     def moderate(self, text: str | None, image) -> dict:
+        """Score the inputs and return every response field except latency_ms."""
         if not text and image is None:
             raise ValueError("send text, an image, or both")
         scores: dict[str, float] = {}
@@ -81,8 +83,9 @@ class Moderator:
             probs = self.text.predict_proba([text])[0]
             for i, lab in enumerate(LABELS):
                 scores[f"text_{lab.lower()}"] = round(float(probs[i]), 4)
-            scores["p_text_jigsaw"] = float(probs[2])
+            scores["p_text_jigsaw"] = float(probs[2])  # P(Harmful), also a fusion feature
             if self.meme_text is not None and image is not None:
+                # binary meme-caption model: the last column is P(hateful)
                 scores["p_text"] = float(self.meme_text.predict_proba([text])[0][-1])
         if image is not None:
             if self.image is not None:
@@ -127,9 +130,14 @@ class Moderator:
         }
 
     def _decide(self, text, image, scores, det) -> tuple[str, str, float]:
+        """Return (mode, label, p_harmful).
+
+        Fusion runs when text, an image and every fusion input are present; otherwise the
+        decision falls back to the text model, then to the image model alone.
+        """
         if self.fusion is not None and text and image is not None:
             feats = self.fusion["features"]
-            needed = {f for f in feats if f != "text_x_image"}
+            needed = {f for f in feats if f != "text_x_image"}  # text_x_image is derived from p_text and p_image
             if needed <= set(scores):
                 from src.fusion.calibrate import apply_temperature_binary
                 from src.fusion.features import features_from_scores
@@ -149,7 +157,7 @@ class Moderator:
             if label == "Harmful" and probs[2] < TEXT_ONLY_REVIEW:
                 label = "Neutral"
             return "text", label, float(probs[2])
-        # image only
+        # image only: fixed 0.5 cut on the image model
         p = scores.get("p_image", 0.0)
         label = "Harmful" if p >= 0.5 else "Safe"
         if det is not None and det["weapon_present"] and label == "Safe":
@@ -170,6 +178,7 @@ def _decode_image(raw: bytes):
 
 
 def _fetch(url: str) -> bytes:
+    """Download image_url (http or https only, 10 s timeout)."""
     import httpx
 
     if not url.startswith(("http://", "https://")):
@@ -183,6 +192,7 @@ def _fetch(url: str) -> bytes:
 
 
 def create_app(moderator: Moderator | None = None) -> FastAPI:
+    """Build the app. Tests inject a Moderator with stub models; otherwise models load from disk at startup."""
     state: dict = {"mod": moderator}
 
     def mod() -> Moderator:
@@ -199,6 +209,7 @@ def create_app(moderator: Moderator | None = None) -> FastAPI:
 
     def run(text: str | None, image) -> dict:
         t0 = time.perf_counter()
+        # bad input -> 422, missing model -> 503
         try:
             out = mod().moderate(text, image)
         except ValueError as e:

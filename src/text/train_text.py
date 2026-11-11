@@ -25,6 +25,7 @@ from src.text.data import load_jigsaw
 
 
 def short_name(model: str) -> str:
+    """e.g. "distilroberta-base" -> "distilroberta"."""
     return model.split("/")[-1].replace("-base", "").replace("-", "_")
 
 
@@ -72,6 +73,7 @@ def main() -> None:
     ds = {k: to_ds(v) for k, v in data.items()}
     weights = torch.tensor(class_weights(data["train"]["label"].to_numpy()), dtype=torch.float)
 
+    # Trainer with class-weighted cross-entropy in place of the default loss
     class WeightedTrainer(Trainer):
         def compute_loss(self, model, inputs, return_outputs=False, **kw):
             labels = inputs.pop("labels")
@@ -92,7 +94,7 @@ def main() -> None:
         learning_rate=args.lr,
         per_device_train_batch_size=args.batch,
         per_device_eval_batch_size=args.batch * 2,
-        warmup_steps=int(math.ceil(len(ds["train"]) / args.batch) * args.epochs * 0.06),
+        warmup_steps=int(math.ceil(len(ds["train"]) / args.batch) * args.epochs * 0.06),  # 6% of all steps
         weight_decay=0.01,
         fp16=torch.cuda.is_available(),
         seed=SEED,

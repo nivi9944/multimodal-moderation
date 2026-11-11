@@ -27,6 +27,7 @@ from src.text.tfidf import TfidfLogReg
 
 # ------------------------------------------------------------------ VADER
 def vader_scores(texts) -> np.ndarray:
+    """VADER compound score in [-1, 1] per text, on the first 2000 characters after normalisation."""
     from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
     sia = SentimentIntensityAnalyzer()
@@ -42,7 +43,10 @@ def vader_predict(compound: np.ndarray, t_harm: float, t_neutral: float) -> np.n
 
 
 def fit_vader(compound_val, y_val) -> tuple[float, float, float]:
-    """Grid-search the two thresholds on validation for macro-F1."""
+    """Grid-search the two thresholds (step 0.05, t_harm <= t_neutral) on validation for macro-F1.
+
+    Returns (best macro-F1, t_harm, t_neutral).
+    """
     from sklearn.metrics import f1_score
 
     grid = np.round(np.arange(-0.95, 0.96, 0.05), 2)
@@ -56,6 +60,7 @@ def fit_vader(compound_val, y_val) -> tuple[float, float, float]:
 
 
 def _save_preds(name: str, split: str, df: pd.DataFrame, probs: np.ndarray | None, pred: np.ndarray, extra=None):
+    """Write per-item predictions to data/processed/text_preds_<name>_<split>.csv."""
     out = pd.DataFrame({"id": df["id"], "label": df["label"], "pred": pred})
     if probs is not None:
         for i, lab in enumerate(LABELS):
@@ -74,6 +79,7 @@ def run_vader(data) -> dict:
     pred = vader_predict(c_test, a, b)
     _save_preds("vader", "test", data["test"], None, pred, {"compound": c_test})
     rep = classification_report(data["test"]["label"], pred)
+    # negated compound, so a higher score means more harmful
     rep["harmful_vs_rest"] = binary_report(harmful_vs_rest(data["test"]["label"]), -c_test, threshold=-a)
     return {
         "thresholds": {"harmful_below": a, "neutral_below": b},
@@ -93,6 +99,7 @@ def run_majority(data) -> dict:
 
 
 def run_tfidf(data, save_model: bool = True) -> tuple[dict, dict]:
+    """Fit TF-IDF + LR on train. Returns (evaluation report, calibration report)."""
     t0 = time.time()
     model = TfidfLogReg().fit(data["train"]["text"].tolist(), data["train"]["label"].to_numpy())
     fit_s = time.time() - t0

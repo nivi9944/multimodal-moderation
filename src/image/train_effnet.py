@@ -58,6 +58,7 @@ def main() -> None:
         return DataLoader(DS(df, False), batch_size=args.batch * 2, num_workers=2)
 
     model = build_model(pretrained=not args.no_pretrained).to(dev)
+    # negatives / positives, so both classes carry equal weight in the BCE loss
     pos_weight = torch.tensor((tr["label"] == 0).sum() / max((tr["label"] == 1).sum(), 1), device=dev)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=args.lr, total_steps=args.epochs * len(dl))
@@ -90,6 +91,7 @@ def main() -> None:
         auc = roc_auc_score(es["label"], predict(es))
         log.append({"epoch": ep + 1, "early_stop_auroc": round(float(auc), 4)})
         print(log[-1])
+        # keep the epoch with the best early-stopping AUROC
         if auc > best:
             best, best_state = auc, {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
     model.load_state_dict(best_state)

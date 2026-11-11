@@ -1,4 +1,4 @@
-"""Late fusion on Hateful Memes + threshold tuning + triage + calibration. CPU, seconds.
+"""Late fusion on Hateful Memes, with threshold tuning, triage and calibration. CPU, seconds.
 
 Usage:
     python -m src.fusion.train_fusion [--memes-root PATH]
@@ -7,12 +7,12 @@ Input: data/processed/meme_scores_*.csv (from the GPU notebook).
 For every feature set in features.VARIANTS:
     * standardised logistic regression trained on fusion_train (5-fold out-of-fold scores for tuning)
     * evaluated on test: AUROC, average precision, macro-F1 at the OOF-best-F1 threshold
-For the deployed variant (late_fusion):
+For the headline variant (best out-of-fold AUROC):
     * t_clear (Harmful recall >= 90% on OOF) and t_flag (precision >= 0.8) -> results/threshold.json
     * triage metric on test -> results/triage.json
-    * temperature scaling ECE -> results/calibration.json (key fusion)
     * failure examples -> results/examples.md
-Model bundle for the API: models/fusion_lr.joblib
+Temperature scaling ECE for the headline and deployed variants -> results/calibration.json (keys fusion_*).
+Model bundle for the API (deployed variant late_fusion, with its own thresholds): models/fusion_lr.joblib
 """
 
 from __future__ import annotations
@@ -43,12 +43,14 @@ def make_model():
 
 
 def best_f1_threshold(y, p) -> float:
+    """Threshold maximising macro-F1 over the 2nd to 98th percentiles of p (97-point grid)."""
     grid = np.unique(np.quantile(p, np.linspace(0.02, 0.98, 97)))
     scores = [f1_score(y, p >= t, average="macro") for t in grid]
     return float(grid[int(np.argmax(scores))])
 
 
 def fit_variant(df: pd.DataFrame, cols: list[str]):
+    """Fit one feature set on fusion_train and score test. Returns None if none of its columns exist."""
     tr, te = df[df.split == "fusion_train"], df[df.split == "test"]
     Xtr, used = make_features(tr, cols)
     if not used:
@@ -72,6 +74,7 @@ def fit_variant(df: pd.DataFrame, cols: list[str]):
 
 
 def write_examples(df_test: pd.DataFrame, p: np.ndarray, th, captions: dict | None, model: str, k: int = 5) -> None:
+    """Write the k most confident misses and false alarms on test to results/examples.md."""
     d = df_test.copy()
     d["p_harmful"] = p
     d["decision"] = np.array(["Safe", "Neutral", "Harmful"])[decide(p, th)]
@@ -108,15 +111,16 @@ def main(argv: list[str] | None = None) -> None:
     for name, cols in VARIANTS.items():
         f = fit_variant(df, cols)
         if f is None or tuple(f["features"]) in seen:
-            continue  # a branch file is missing, so this variant would duplicate another one
+            continue  # no usable columns, or missing branch files reduced it to a variant already fitted
         seen.add(tuple(f["features"]))
         fits[name] = f
 
+    # thresholds and temperature for the API bundle come from the deployed variant
     dep = fits[DEPLOYED]
     th = fit_thresholds(dep["y_oof"], dep["p_oof"], TARGET_RECALL)
     t_temp = fit_temperature_binary(dep["y_oof"], dep["p_oof"])
 
-    # Headline model = best out-of-fold AUROC on fusion_train (never chosen on test).
+    # Headline model: best out-of-fold AUROC on fusion_train, never chosen on test.
     head_name = max(fits, key=lambda k: fits[k]["report"]["oof"].get("auroc", 0))
     head = fits[head_name]
     th_head = fit_thresholds(head["y_oof"], head["p_oof"], TARGET_RECALL)
@@ -168,7 +172,7 @@ def main(argv: list[str] | None = None) -> None:
     tri = triage_report(head["y_test"], head["p_test"], th_head.t_clear)
     tri["variant"] = head_name
     # Reference only (uses test labels, never used for any decision): the share that could be cleared if the
-    # threshold were set on test itself to hit exactly 90% recall. Shows how much the val-to-test shift costs.
+    # threshold were set on test itself to hit exactly 90% recall. It sizes the cost of the val-to-test shift.
     t_oracle = threshold_for_recall(head["y_test"], head["p_test"], TARGET_RECALL)
     tri["reference_test_oracle_at_target_recall"] = {
         "auto_cleared_pct": triage_report(head["y_test"], head["p_test"], t_oracle)["auto_cleared_pct"],

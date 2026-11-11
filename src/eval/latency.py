@@ -81,6 +81,7 @@ def main() -> None:
     health = client.get("/health").json()
 
     def call(pl):
+        """Send one request; returns (client wall-clock ms, server-reported latency_ms)."""
         data, img = pl
         files = {"image": ("x.png", img, "image/png")} if img is not None else None
         t0 = time.perf_counter()
@@ -94,6 +95,7 @@ def main() -> None:
     client_ms = [r[0] for r in rows]
     server_ms = [r[1] for r in rows]
 
+    # Throughput: replay the same payloads from `concurrency` threads sharing one client.
     t0 = time.perf_counter()
     with ThreadPoolExecutor(args.concurrency) as ex:
         list(ex.map(call, payloads[args.warmup :]))
